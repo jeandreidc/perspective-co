@@ -17,13 +17,14 @@ export class UserServiceImpl implements UserService {
         this.userRepository.createUser(user);
     }
 
-    getAllUsers(): Promise<UserResponseModel[]> {
+    getAllUsers(sortAscendingByCreation: boolean): Promise<UserResponseModel[]> {
         return this.userRepository
             .getUsers()
-            .then(users => users.map(u => UserResponseModel.fromUserModel(u)),
+            .then(users => users
+                .sort((a, b) => (b.createdAt.getTime() - a.createdAt.getTime()) * (sortAscendingByCreation ? -1 : 1))
+                .map(u => UserResponseModel.fromUserModel(u)),
                 reason => {
-                    console.log(reason);
-                    throw Error("Error fetching users!")
+                    throw new Error(reason);
                 });
     }
 
