@@ -1,15 +1,32 @@
 
 import express, { Express, Request, Response } from 'express';
-import cors from 'cors';
+import { UserService } from '../../app/services/user-service';
 
-const userRouter = express.Router();
+export default function UserRouter(
+    userService: UserService
+) {
 
-userRouter.post('/users', (req: Request, res: Response) => {
-    res.send({}).status(201);
-});
+    const router = express.Router();
 
-userRouter.get('/users', (req: Request, res: Response) => {
-    res.send([]).status(200);
-});
+    router.get('/users', async (req: Request, res: Response) => {
+        try {
+            const contacts = await userService.getAllUsers()
+            res.send(contacts)
+        } catch (err) {
+            res.status(500).send({ message: "Error fetching data" })
+        }
+    })
 
-export default userRouter;
+    router.post('/users', async (req: Request, res: Response) => {
+        try {
+            await userService.createUser(req.body)
+            res.statusCode = 201
+            res.json({ message: "Created" })
+        } catch (err) {
+            console.log(err.message)
+            res.status(500).send({ message: "Error saving data" })
+        }
+    })
+
+    return router
+}
