@@ -16,3 +16,11 @@ This project skeleton contains a basic Express setup one endpoint to create a us
 Feel free to add or change this project as you like.
 
 
+## Solution notes
+1. Created a project structure to resemble clean architecture
+    - Made the domain the center of the project
+    - Domain does not depend on anything
+2. Separated structure to api, app, data (infra), and domain
+3. Added unit tests for api endpoints, app service, and data layer
+    - Domain layer do not have a lot of logic as this is a simple CRUD application without complex busines rules (yet)
+    
