@@ -15,30 +15,15 @@ export class MongoDBContactDataSource implements UserDataSource {
     }
     async getOne(id: String): Promise<User> {
         const result = await this.db.find({ _id: id })
-        return result.map(item => ({
-            id: item._id.toString(),
-            firstName: item.firstName,
-            lastName: item.lastName,
-            email: item.email,
-            createdAt: item.createdAt,
-        }))[0];
+        return result[0];
     }
 
     async create(user: User) {
-        await this.db.insertOne(user);
+        this.db.insertOne(user);
     }
 
     async getAll(): Promise<User[]> {
-        // pwede lagyan ng mapper dito
-        // Todo Andrei: Alamin paano mag filter
-        const result = await this.db.find({})
-        return result.map(item => ({
-            id: item._id.toString(),
-            firstName: item.firstName,
-            lastName: item.lastName,
-            email: item.email,
-            createdAt: item.createdAt,
-        }));
+        return await this.db.find({});
     }
 
 }

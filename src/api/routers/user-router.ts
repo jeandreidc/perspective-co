@@ -27,7 +27,6 @@ export default function UserRouter(
         }
 
         try {
-            console.log(req.query.created?.toString());
             const users = await userService.getAllUsers(["ascending", "asc"].some(s => s == req.query.created?.toString()));
             res.send(users);
         } catch (err) {
@@ -43,7 +42,7 @@ export default function UserRouter(
         }
 
         try {
-            await userService.createUser(req.body)
+            userService.createUser(req.body)
             res.statusCode = 201
             res.json({ message: "Created" })
         } catch (err) {
