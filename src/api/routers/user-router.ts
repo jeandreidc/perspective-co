@@ -41,14 +41,14 @@ export default function UserRouter(
             return res.status(400).json({ errors: errors.array() });
         }
 
-        try {
-            userService.createUser(req.body)
-            res.statusCode = 201
-            res.json({ message: "Created" })
-        } catch (err) {
-            console.log(err.message)
-            res.status(500).send({ message: "Error saving data" })
-        }
+        userService.createUser(req.body)
+            .then(success => {
+                res.statusCode = 201
+                res.json({ message: "Created" })
+            }, reason => {
+                console.log(reason.message)
+                res.status(500).send({ message: "Error saving data" })
+            });
     })
 
     return router;
