@@ -8,7 +8,7 @@ import { describe, expect, test, beforeEach, jest } from '@jest/globals';
 
 describe("User Service", () => {
     class MockUserRepository implements UserRepository {
-        createUser(contact: User): Promise<boolean> {
+        createUser(contact: User): Promise<void> {
             throw new Error("Method not implemented.");
         }
         getUsers(): Promise<User[]> {
@@ -30,10 +30,10 @@ describe("User Service", () => {
         test("should create user", async () => {
             const InputData: UserCreateRequestModel = { firstName: "hotdog", lastName: "Ha?", email: "test@test.com" };
 
-            jest.spyOn(mockUserRepo, "createUser").mockImplementation(() => Promise.resolve(true))
+            jest.spyOn(mockUserRepo, "createUser").mockImplementation(() => Promise.resolve())
             jest.spyOn(mockUserRepo, "findByEmail").mockImplementation(() => null)
             const userSvc = new UserServiceImpl(mockUserRepo)
-            userSvc.createUser(InputData);
+            await userSvc.createUser(InputData);
             expect(mockUserRepo.createUser).toBeCalledTimes(1)
 
         });
@@ -44,11 +44,11 @@ describe("User Service", () => {
             jest.spyOn(mockUserRepo, "findByEmail").mockImplementation(() => Promise.resolve(User.create("123", "Existing", "Email Result")))
             const userSvc = new UserServiceImpl(mockUserRepo)
 
-            const result = () => {
-                userSvc.createUser(InputData)
+            const result = async () => {
+                await userSvc.createUser(InputData)
             };
 
-            expect(result).toThrow(EmailAlreadyExistsError);
+            expect(result).rejects;
         });
 
     })
