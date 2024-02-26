@@ -1,7 +1,6 @@
 import express, { Express, Request, Response } from 'express';
 import * as dotenv from 'dotenv';
 import cors from 'cors';
-import userRouter from './api/routers/user-router';
 import { NoSQLDatabaseWrapper } from './data/interfaces/data-sources/nosql-database-wrapper';
 import { MongoDBContactDataSource } from './data/data-sources/mongodb-user-datasource';
 import { MongoClient } from 'mongodb';
