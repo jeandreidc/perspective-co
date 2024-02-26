@@ -1,10 +1,10 @@
 import { UserCreateRequestModel, UserResponseModel } from "../../app/models/user-model";
+import { User } from "../../domain/entities/user";
 
 
 export interface UserDataSource {
-    create(user: UserCreateRequestModel): void;
-    getAll(): Promise<UserResponseModel[]>;
-    deleteOne(id: String): void;
-    updateOne(id: String, data: UserCreateRequestModel): void;
-    getOne(id: String): Promise<UserResponseModel | null>;
+    create(user: User): void;
+    getAll(): Promise<User[]>;
+    getOne(id: String): Promise<User | null>;
+    findByEmail(id: String): Promise<User | null>;
 }

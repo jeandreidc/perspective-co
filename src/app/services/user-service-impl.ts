@@ -10,8 +10,9 @@ export class UserServiceImpl implements UserService {
         this.userRepository = userRepository;
     }
 
-    createUser(newUser: UserCreateRequestModel): void {
-        let existingUser = this.userRepository.findByEmail(newUser.email);
+    async createUser(newUser: UserCreateRequestModel): Promise<void> {
+        let existingUser = await this.userRepository.findByEmail(newUser.email);
+        console.log(existingUser);
         if (existingUser != null) throw new EmailAlreadyExistsError();
         let user = User.create(newUser.firstName, newUser.lastName, newUser.email);
         this.userRepository.createUser(user);

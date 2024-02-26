@@ -41,7 +41,6 @@ describe("User Service", () => {
         test("email exists should throw EmailAlreadyExistsError", async () => {
             const InputData: UserCreateRequestModel = { firstName: "hotdog", lastName: "Ha?", email: "test@test.com" };
 
-            jest.spyOn(mockUserRepo, "createUser").mockImplementation(() => Promise.resolve(true))
             jest.spyOn(mockUserRepo, "findByEmail").mockImplementation(() => Promise.resolve(User.create("123", "Existing", "Email Result")))
             const userSvc = new UserServiceImpl(mockUserRepo)
 

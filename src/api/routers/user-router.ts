@@ -8,17 +8,19 @@ export default function UserRouter(
 
     const router = express.Router();
 
-    router.get('/users', async (req: Request, res: Response) => {
+    router.get('/', async (req: Request, res: Response) => {
         try {
-            const contacts = await userService.getAllUsers()
-            res.send(contacts)
+            const contacts = await userService.getAllUsers(req.query.created == "ascending");
+            console.log(contacts);
+            res.send(contacts);
         } catch (err) {
             res.status(500).send({ message: "Error fetching data" })
         }
     })
 
-    router.post('/users', async (req: Request, res: Response) => {
+    router.post('/', async (req: Request, res: Response) => {
         try {
+            console.log(req.body);
             await userService.createUser(req.body)
             res.statusCode = 201
             res.json({ message: "Created" })
@@ -28,5 +30,5 @@ export default function UserRouter(
         }
     })
 
-    return router
+    return router;
 }

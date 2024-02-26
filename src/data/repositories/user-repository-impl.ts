@@ -1,14 +1,20 @@
 import { User } from "../../domain/entities/user";
 import { UserRepository } from "../../domain/interfaces/repositories/user-repository";
+import { UserDataSource } from "../interfaces/user-datasource";
 
 export class UserRepositoryImpl implements UserRepository {
-    findByEmail(user: User): Promise<User> {
-        throw new Error("Method not implemented.");
+    userDataSource: UserDataSource;
+    constructor(contactDataSource: UserDataSource) {
+        this.userDataSource = contactDataSource
     }
-    createUser(user: User): Promise<boolean> {
-        throw new Error("Method not implemented.");
+
+    findByEmail(email: string): Promise<User> {
+        return this.userDataSource.findByEmail(email);
     }
-    getUsers(): Promise<User[]> {
-        throw new Error("Method not implemented.");
+    createUser(user: User): void {
+        this.userDataSource.create(user);
+    }
+    async getUsers(): Promise<User[]> {
+        return await this.userDataSource.getAll();
     }
 }

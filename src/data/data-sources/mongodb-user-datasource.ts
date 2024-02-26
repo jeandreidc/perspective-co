@@ -1,4 +1,5 @@
 import { UserCreateRequestModel, UserResponseModel } from "../../app/models/user-model";
+import { User } from "../../domain/entities/user";
 import { NoSQLDatabaseWrapper } from "../interfaces/data-sources/nosql-database-wrapper";
 import { UserDataSource } from "../interfaces/user-datasource";
 
@@ -8,14 +9,11 @@ export class MongoDBContactDataSource implements UserDataSource {
     constructor(db: NoSQLDatabaseWrapper) {
         this.db = db
     }
-    async deleteOne(id: String) {
-        await this.db.deleteOne(id)
-    }
-    async updateOne(id: String, data: UserCreateRequestModel) {
-        await this.db.updateOne(id, data)
-    }
 
-    async getOne(id: String): Promise<UserResponseModel> {
+    async findByEmail(email: String): Promise<User> {
+        return await this.db.findOne({ email: email });
+    }
+    async getOne(id: String): Promise<User> {
         const result = await this.db.find({ _id: id })
         return result.map(item => ({
             id: item._id.toString(),
@@ -23,14 +21,14 @@ export class MongoDBContactDataSource implements UserDataSource {
             lastName: item.lastName,
             email: item.email,
             createdAt: item.createdAt,
-        }))[0]
+        }))[0];
     }
 
-    async create(contact: UserCreateRequestModel) {
-        await this.db.insertOne(contact)
+    async create(user: User) {
+        await this.db.insertOne(user);
     }
 
-    async getAll(): Promise<UserResponseModel[]> {
+    async getAll(): Promise<User[]> {
         // pwede lagyan ng mapper dito
         // Todo Andrei: Alamin paano mag filter
         const result = await this.db.find({})
