@@ -3,15 +3,22 @@ import express, { Express, Request, Response } from 'express';
 import { UserService } from '../../app/services/user-service';
 import { validationResult, body, ValidationChain, query } from 'express-validator';
 
+
+const filterValidator: ValidationChain[] = [
+    query('created').optional().isIn(['ascending', 'descending', 'asc', 'desc']),
+]
+
+const userValidator: ValidationChain[] = [
+    body('firstName', 'username is Empty').not().isEmpty(),
+    body('lastName', 'username is Empty').not().isEmpty(),
+    body('email', 'Invalid email').isEmail(),
+]
+
 export default function UserRouter(
     userService: UserService
 ) {
 
     const router = express.Router();
-
-    const filterValidator: ValidationChain[] = [
-        query('created').optional().isIn(['ascending', 'descending', 'asc', 'desc']),
-    ]
 
     router.get('/', filterValidator, async (req: Request, res: Response) => {
         const errors = validationResult(req);
@@ -28,12 +35,6 @@ export default function UserRouter(
             res.status(500).send({ message: "Error fetching data" });
         }
     })
-
-    const userValidator: ValidationChain[] = [
-        body('firstName', 'username is Empty').not().isEmpty(),
-        body('lastName', 'username is Empty').not().isEmpty(),
-        body('email', 'Invalid email').isEmail(),
-    ]
 
     router.post('/', userValidator, async (req: Request, res: Response) => {
         const errors = validationResult(req);
