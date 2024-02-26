@@ -80,7 +80,7 @@ describe("User Service", () => {
                     lastName: "Smith",
                     createdAt: moment(today).subtract(1, "days").toDate(),
                     email: "test@test.com"
-                },
+                }
 
             ];
 
@@ -121,6 +121,13 @@ describe("User Service", () => {
                     firstName: "Jabari",
                     lastName: "Smith",
                     createdAt: moment(today).subtract(1, "days").toDate(),
+                    email: "test@test.com"
+                },
+                {
+                    id: "4",
+                    firstName: "Jabari",
+                    lastName: "Smith",
+                    createdAt: moment(today).subtract(1, "minutes").toDate(),
                     email: "test@test.com"
                 },
 
